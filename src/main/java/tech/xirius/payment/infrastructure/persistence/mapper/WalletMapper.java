@@ -16,9 +16,11 @@ import tech.xirius.payment.infrastructure.persistence.entity.WalletEntity;
 public interface WalletMapper {
     WalletMapper INSTANCE = Mappers.getMapper(WalletMapper.class);
 
+    @Mapping(source = "walletId", target = "walletId")
     @Mapping(source = "balance", target = "balance", qualifiedByName = "bigDecimalToMoney")
     Wallet toDomain(WalletEntity entity);
 
+    @Mapping(source = "walletId", target = "walletId")
     @Mapping(source = "balance", target = "balance", qualifiedByName = "moneyToBigDecimal")
     WalletEntity toEntity(Wallet wallet);
 
