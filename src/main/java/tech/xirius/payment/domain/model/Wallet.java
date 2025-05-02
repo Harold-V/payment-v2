@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import tech.xirius.payment.domain.exception.InsufficientBalanceException;
 
 @AllArgsConstructor
 @Getter
