@@ -1,4 +1,4 @@
-package tech.xirius.payment.infrastructure.persistence.mappers;
+package tech.xirius.payment.infrastructure.persistence.mapper;
 
 import java.math.BigDecimal;
 
@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 import tech.xirius.payment.domain.model.Currency;
 import tech.xirius.payment.domain.model.Money;
 import tech.xirius.payment.domain.model.Wallet;
-import tech.xirius.payment.infrastructure.persistence.entities.WalletEntity;
+import tech.xirius.payment.infrastructure.persistence.entity.WalletEntity;
 
 @Mapper(componentModel = "spring")
 public interface WalletMapper {

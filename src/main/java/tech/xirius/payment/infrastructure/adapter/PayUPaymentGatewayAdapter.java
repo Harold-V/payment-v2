@@ -1,6 +1,6 @@
-package tech.xirius.payment.infrastructure.adapters;
+package tech.xirius.payment.infrastructure.adapter;
 
-import tech.xirius.payment.application.ports.out.PaymentGatewayPort;
+import tech.xirius.payment.application.port.out.PaymentGatewayPort;
 import tech.xirius.payment.infrastructure.web.dto.PaymentRequest;
 import tech.xirius.payment.infrastructure.web.dto.PaymentResponse;
 

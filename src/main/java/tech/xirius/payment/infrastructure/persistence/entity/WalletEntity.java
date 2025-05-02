@@ -1,4 +1,4 @@
-package tech.xirius.payment.infrastructure.persistence.entities;
+package tech.xirius.payment.infrastructure.persistence.entity;
 
 import java.math.BigDecimal;
 import java.util.UUID;

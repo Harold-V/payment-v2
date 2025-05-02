@@ -1,4 +1,4 @@
-package tech.xirius.payment.application.ports.in;
+package tech.xirius.payment.application.port.in;
 
 import java.math.BigDecimal;
 import java.util.Optional;
