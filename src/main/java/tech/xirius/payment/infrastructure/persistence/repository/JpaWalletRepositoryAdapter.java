@@ -2,6 +2,7 @@ package tech.xirius.payment.infrastructure.persistence.repository;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,12 @@ public class JpaWalletRepositoryAdapter implements WalletRepositoryPort {
         WalletEntity entity = walletMapper.toEntity(wallet);
         WalletEntity saved = jpaWalletRepository.save(entity);
         return walletMapper.toDomain(saved);
+    }
+
+    @Override
+    public Optional<Wallet> findById(UUID walletId) {
+        return jpaWalletRepository.findById(walletId)
+                .map(walletMapper::toDomain);
     }
 
 }
