@@ -6,6 +6,8 @@ import java.util.UUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,11 +18,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "wallet", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "user_id")
+})
 public class WalletEntity {
 
     @Id
-    @Column(name = "id", nullable = false, updatable = false)
-    private UUID id;
+    @Column(name = "wallet_id", nullable = false, updatable = false)
+    private UUID walletId;
 
     @Column(name = "user_id", nullable = false, unique = true, length = 255)
     private String userId;

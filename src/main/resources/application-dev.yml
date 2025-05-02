@@ -23,5 +23,3 @@ payu:
     login: pRRXKOl8ikMmt9u
     key: 4Vj8eK4rloUd272L48hsrarnUA
     url: https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi
-  response:
-    url: https://dev-tunel.ngrok.app/webhook/payu/notification
