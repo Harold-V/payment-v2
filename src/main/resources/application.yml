@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: dev
+
+logging:
+  level:
+    "org.hibernate.SQL": DEBUG
+    "org.hibernate.type.descriptor.sql.BasicBinder": TRACE
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  default-produces-media-type: application/json
