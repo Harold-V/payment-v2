@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class WalletTransaction {
 
-    private final UUID transactionId;
+    private final UUID id;
 
     private final UUID walletId;
 

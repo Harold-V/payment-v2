@@ -14,12 +14,12 @@ import java.util.UUID;
 @Mapper(uses = { WalletMapper.class }, componentModel = "spring")
 public interface WalletTransactionMapper {
 
-    @Mapping(source = "id", target = "transactionId")
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "wallet.id", target = "walletId")
     @Mapping(source = ".", target = "amount", qualifiedByName = "toMoney")
     WalletTransaction toDomain(WalletTransactionEntity entity);
 
-    @Mapping(source = "transactionId", target = "id")
+    @Mapping(source = "id", target = "id")
     @Mapping(target = "wallet", source = "walletId", qualifiedByName = "mapWalletId")
     @Mapping(source = "amount.amount", target = "amount")
     @Mapping(source = "amount.currency", target = "currency")

@@ -14,11 +14,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface WalletMapper {
 
-    @Mapping(source = "id", target = "walletId")
+    @Mapping(source = "id", target = "id")
     @Mapping(source = ".", target = "balance", qualifiedByName = "toMoney")
     Wallet toDomain(WalletEntity entity);
 
-    @Mapping(source = "walletId", target = "id")
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "balance.amount", target = "balance")
     @Mapping(source = "balance.currency", target = "currency")
     WalletEntity toEntity(Wallet domain);
