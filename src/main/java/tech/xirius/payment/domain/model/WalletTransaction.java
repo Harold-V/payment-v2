@@ -34,21 +34,4 @@ public class WalletTransaction {
 
     private final String message;
 
-    public static WalletTransaction create(UUID walletId, Money amount, WalletTransactionType type,
-            WalletTransactionStatus status, UUID paymentId,
-            BigDecimal previousBalance, BigDecimal newBalance,
-            String message) {
-        return new WalletTransaction(
-                UUID.randomUUID(),
-                walletId,
-                amount,
-                type,
-                status,
-                ZonedDateTime.now(),
-                paymentId,
-                previousBalance,
-                newBalance,
-                message);
-    }
-
 }

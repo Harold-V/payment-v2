@@ -28,7 +28,7 @@ public class WalletEntity {
 
     @Id
     @Column(name = "wallet_id", nullable = false, updatable = false)
-    private UUID walletId;
+    private UUID id;
 
     @Column(name = "user_id", nullable = false, unique = true, length = 255)
     private String userId;

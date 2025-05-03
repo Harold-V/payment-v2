@@ -3,7 +3,6 @@ package tech.xirius.payment.infrastructure.persistence.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
-import org.mapstruct.factory.Mappers;
 
 import tech.xirius.payment.domain.model.Money;
 import tech.xirius.payment.domain.model.Currency;
@@ -13,8 +12,6 @@ import tech.xirius.payment.infrastructure.persistence.entity.WalletEntity;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface WalletMapper {
-
-    WalletMapper INSTANCE = Mappers.getMapper(WalletMapper.class);
 
     @Mapping(target = "balance", expression = "java(toMoney(entity.getBalance(), entity.getCurrency()))")
     Wallet toDomain(WalletEntity entity);

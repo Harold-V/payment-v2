@@ -9,7 +9,7 @@ import tech.xirius.payment.domain.exception.InsufficientBalanceException;
 @AllArgsConstructor
 @Getter
 public class Wallet {
-    private final UUID walletId;
+    private final UUID id;
     private final String userId;
     private Money balance;
 

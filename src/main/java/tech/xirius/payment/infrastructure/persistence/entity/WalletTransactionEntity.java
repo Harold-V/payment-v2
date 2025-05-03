@@ -23,7 +23,7 @@ import java.util.UUID;
 public class WalletTransactionEntity {
 
     @Id
-    @Column(name = "id", nullable = false, updatable = false, unique = true)
+    @Column(name = "transaction_id", nullable = false, updatable = false, unique = true)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
