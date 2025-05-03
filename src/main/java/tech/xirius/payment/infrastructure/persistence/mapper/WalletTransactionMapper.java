@@ -2,29 +2,45 @@ package tech.xirius.payment.infrastructure.persistence.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-
+import org.mapstruct.Named;
 import tech.xirius.payment.domain.model.Money;
 import tech.xirius.payment.domain.model.WalletTransaction;
-import tech.xirius.payment.domain.model.Currency;
-
-import java.math.BigDecimal;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletEntity;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletTransactionEntity;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = { WalletMapper.class })
+import java.util.List;
+import java.util.UUID;
+
+@Mapper(uses = { WalletMapper.class }, componentModel = "spring")
 public interface WalletTransactionMapper {
 
-    @Mapping(target = "amount", expression = "java(toMoney(entity.getAmount(), entity.getCurrency()))")
-    @Mapping(target = "walletId", expression = "java(entity.getWallet().getWalletId())")
+    @Mapping(source = "id", target = "transactionId")
+    @Mapping(source = "wallet.id", target = "walletId")
+    @Mapping(source = ".", target = "amount", qualifiedByName = "toMoney")
     WalletTransaction toDomain(WalletTransactionEntity entity);
 
-    @Mapping(target = "wallet", source = "walletEntity")
-    @Mapping(target = "amount", source = "domain.amount.amount")
-    @Mapping(target = "currency", source = "domain.amount.currency")
-    WalletTransactionEntity toEntity(WalletTransaction domain, WalletEntity walletEntity);
+    @Mapping(source = "transactionId", target = "id")
+    @Mapping(target = "wallet", source = "walletId", qualifiedByName = "mapWalletId")
+    @Mapping(source = "amount.amount", target = "amount")
+    @Mapping(source = "amount.currency", target = "currency")
+    WalletTransactionEntity toEntity(WalletTransaction domain);
 
-    default Money toMoney(BigDecimal amount, Currency currency) {
-        return new Money(amount, currency);
+    List<WalletTransaction> toDomainList(List<WalletTransactionEntity> entities);
+
+    List<WalletTransactionEntity> toEntityList(List<WalletTransaction> domains);
+
+    @Named("toMoney")
+    default Money toMoney(WalletTransactionEntity entity) {
+        return new Money(entity.getAmount(), entity.getCurrency());
+    }
+
+    @Named("mapWalletId")
+    default WalletEntity mapWalletId(UUID walletId) {
+        if (walletId == null) {
+            return null;
+        }
+        WalletEntity walletEntity = new WalletEntity();
+        walletEntity.setId(walletId);
+        return walletEntity;
     }
 }

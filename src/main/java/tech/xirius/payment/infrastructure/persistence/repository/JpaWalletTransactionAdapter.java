@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import tech.xirius.payment.domain.model.WalletTransaction;
 import tech.xirius.payment.domain.repository.WalletTransactionRepositoryPort;
-import tech.xirius.payment.infrastructure.persistence.entity.WalletEntity;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletTransactionEntity;
 import tech.xirius.payment.infrastructure.persistence.mapper.WalletTransactionMapper;
 
@@ -18,18 +17,10 @@ import tech.xirius.payment.infrastructure.persistence.mapper.WalletTransactionMa
 public class JpaWalletTransactionAdapter implements WalletTransactionRepositoryPort {
     private final JpaWalletTransactionRepository transactionJpaRepository;
     private final WalletTransactionMapper transactionMapper;
-    private final JpaWalletRepository walletJpaRepository;
 
     @Override
     public void save(WalletTransaction transaction) {
-        WalletEntity walletEntity = walletJpaRepository.findById(transaction.getWalletId())
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Wallet not found for walletId: " + transaction.getWalletId()));
-
-        // Mapear a entidad
-        WalletTransactionEntity entity = transactionMapper.toEntity(transaction, walletEntity);
-
-        // Guardar en la base de datos
+        WalletTransactionEntity entity = transactionMapper.toEntity(transaction);
         transactionJpaRepository.save(entity);
     }
 
@@ -38,4 +29,5 @@ public class JpaWalletTransactionAdapter implements WalletTransactionRepositoryP
         return transactionJpaRepository.findAllByWalletId(walletId, pageable)
                 .map(transactionMapper::toDomain);
     }
+
 }

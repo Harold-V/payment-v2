@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletTransactionEntity;
 
 public interface JpaWalletTransactionRepository extends JpaRepository<WalletTransactionEntity, UUID> {
+
     Page<WalletTransactionEntity> findAllByWalletId(UUID walletId, Pageable pageable);
 
 }

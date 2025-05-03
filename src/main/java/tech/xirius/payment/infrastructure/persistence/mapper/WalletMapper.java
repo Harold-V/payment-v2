@@ -2,25 +2,43 @@ package tech.xirius.payment.infrastructure.persistence.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-
-import tech.xirius.payment.domain.model.Money;
+import org.mapstruct.Named;
 import tech.xirius.payment.domain.model.Currency;
-
+import tech.xirius.payment.domain.model.Money;
 import tech.xirius.payment.domain.model.Wallet;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletEntity;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+import java.math.BigDecimal;
+import java.util.List;
+
+@Mapper(componentModel = "spring")
 public interface WalletMapper {
 
-    @Mapping(target = "balance", expression = "java(toMoney(entity.getBalance(), entity.getCurrency()))")
+    @Mapping(source = "id", target = "walletId")
+    @Mapping(source = ".", target = "balance", qualifiedByName = "toMoney")
     Wallet toDomain(WalletEntity entity);
 
-    @Mapping(target = "balance", source = "domain.balance.amount")
-    @Mapping(target = "currency", source = "domain.balance.currency")
+    @Mapping(source = "walletId", target = "id")
+    @Mapping(source = "balance.amount", target = "balance")
+    @Mapping(source = "balance.currency", target = "currency")
     WalletEntity toEntity(Wallet domain);
 
-    default Money toMoney(java.math.BigDecimal amount, Currency currency) {
-        return new Money(amount, currency);
+    List<Wallet> toDomainList(List<WalletEntity> entities);
+
+    List<WalletEntity> toEntityList(List<Wallet> domains);
+
+    @Named("toMoney")
+    default Money toMoney(WalletEntity entity) {
+        return new Money(entity.getBalance(), entity.getCurrency());
+    }
+
+    @Named("toAmount")
+    default BigDecimal toAmount(Money money) {
+        return money.getAmount();
+    }
+
+    @Named("toCurrency")
+    default Currency toCurrency(Money money) {
+        return money.getCurrency();
     }
 }

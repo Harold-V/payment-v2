@@ -40,7 +40,7 @@ public class RechargeWalletService implements RechargeWalletUseCase {
         if (paymentId.isPresent()) {
             transactionRepository.save(new WalletTransaction(
                     UUID.randomUUID(),
-                    wallet.getId(),
+                    wallet.getWalletId(),
                     new Money(amount, Currency.COP),
                     WalletTransactionType.RECHARGE,
                     WalletTransactionStatus.APPROVED, // ES DE PRUEBA
@@ -53,12 +53,12 @@ public class RechargeWalletService implements RechargeWalletUseCase {
         } else {
             transactionRepository.save(new WalletTransaction(
                     UUID.randomUUID(),
-                    wallet.getId(),
+                    wallet.getWalletId(),
                     new Money(amount, Currency.COP),
                     WalletTransactionType.RECHARGE,
                     WalletTransactionStatus.APPROVED, // ES DE PRUEBA
                     ZonedDateTime.now(),
-                    null, // Las recargas deberian tener un paymentId asociado pero estamos enn unn
+                    null, // Las recargas deberian tener un paymentId asociado pero estamos en un
                           // ambiente de pruebas
                     previousBalance,
                     wallet.getBalance().getAmount(),
