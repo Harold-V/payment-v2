@@ -26,7 +26,8 @@ public class GetWalletBalanceService implements GetWalletBalanceUseCase {
         // Crear respuesta
         return new WalletBalanceResponse(
                 wallet.getUserId(),
-                wallet.getBalance().getAmount());
+                wallet.getBalance().getAmount(),
+                wallet.getBalance().getCurrency());
     }
 
 }

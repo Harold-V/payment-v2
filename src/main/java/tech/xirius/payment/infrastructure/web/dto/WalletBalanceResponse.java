@@ -2,7 +2,10 @@ package tech.xirius.payment.infrastructure.web.dto;
 
 import java.math.BigDecimal;
 
-public record WalletBalanceResponse(String userId,
-        BigDecimal balance) {
+import tech.xirius.payment.domain.model.Currency;
+
+public record WalletBalanceResponse(
+                String userId,
+                BigDecimal balance, Currency currency) {
 
 }

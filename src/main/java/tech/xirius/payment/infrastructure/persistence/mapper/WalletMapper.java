@@ -1,37 +1,29 @@
 package tech.xirius.payment.infrastructure.persistence.mapper;
 
-import java.math.BigDecimal;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
-import tech.xirius.payment.domain.model.Currency;
 import tech.xirius.payment.domain.model.Money;
+import tech.xirius.payment.domain.model.Currency;
+
 import tech.xirius.payment.domain.model.Wallet;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletEntity;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface WalletMapper {
+
     WalletMapper INSTANCE = Mappers.getMapper(WalletMapper.class);
 
-    @Mapping(source = "walletId", target = "walletId")
-    @Mapping(source = "balance", target = "balance", qualifiedByName = "bigDecimalToMoney")
+    @Mapping(target = "balance", expression = "java(toMoney(entity.getBalance(), entity.getCurrency()))")
     Wallet toDomain(WalletEntity entity);
 
-    @Mapping(source = "walletId", target = "walletId")
-    @Mapping(source = "balance", target = "balance", qualifiedByName = "moneyToBigDecimal")
-    WalletEntity toEntity(Wallet wallet);
+    @Mapping(target = "balance", source = "domain.balance.amount")
+    @Mapping(target = "currency", source = "domain.balance.currency")
+    WalletEntity toEntity(Wallet domain);
 
-    @Named("bigDecimalToMoney")
-    default Money bigDecimalToMoney(BigDecimal amount) {
-        return Money.of(amount, Currency.COP);
+    default Money toMoney(java.math.BigDecimal amount, Currency currency) {
+        return new Money(amount, currency);
     }
-
-    @Named("moneyToBigDecimal")
-    default BigDecimal moneyToBigDecimal(Money money) {
-        return money.getAmount();
-    }
-
 }
