@@ -47,8 +47,7 @@ public class RechargeWalletService implements RechargeWalletUseCase {
                     ZonedDateTime.now(),
                     paymentId.get(),
                     previousBalance,
-                    wallet.getBalance().getAmount(),
-                    "Recarga exitosa"));
+                    wallet.getBalance().getAmount()));
 
         } else {
             transactionRepository.save(new WalletTransaction(
@@ -61,8 +60,7 @@ public class RechargeWalletService implements RechargeWalletUseCase {
                     null, // Las recargas deberian tener un paymentId asociado pero estamos en un
                           // ambiente de pruebas
                     previousBalance,
-                    wallet.getBalance().getAmount(),
-                    "Recarga exitosa"));
+                    wallet.getBalance().getAmount()));
         }
 
     }

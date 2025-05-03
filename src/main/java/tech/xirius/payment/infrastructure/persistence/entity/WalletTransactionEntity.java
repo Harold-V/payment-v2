@@ -57,6 +57,4 @@ public class WalletTransactionEntity {
     @Column(name = "new_balance", nullable = false, precision = 38, scale = 2)
     private BigDecimal newBalance;
 
-    @Column(name = "message")
-    private String message;
 }

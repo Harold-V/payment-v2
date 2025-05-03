@@ -32,6 +32,4 @@ public class WalletTransaction {
 
     private final BigDecimal newBalance;
 
-    private final String message;
-
 }
