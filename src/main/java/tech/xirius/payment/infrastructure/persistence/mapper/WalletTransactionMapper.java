@@ -8,6 +8,8 @@ import org.mapstruct.factory.Mappers;
 import tech.xirius.payment.domain.model.Money;
 import tech.xirius.payment.domain.model.WalletTransaction;
 import tech.xirius.payment.domain.model.Currency;
+
+import java.math.BigDecimal;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletEntity;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletTransactionEntity;
 
@@ -25,7 +27,7 @@ public interface WalletTransactionMapper {
     @Mapping(target = "currency", source = "domain.amount.currency")
     WalletTransactionEntity toEntity(WalletTransaction domain, WalletEntity walletEntity);
 
-    default Money toMoney(java.math.BigDecimal amount, Currency currency) {
+    default Money toMoney(BigDecimal amount, Currency currency) {
         return new Money(amount, currency);
     }
 }
