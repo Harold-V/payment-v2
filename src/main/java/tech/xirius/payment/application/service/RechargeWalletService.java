@@ -2,7 +2,6 @@ package tech.xirius.payment.application.service;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -25,10 +24,10 @@ import tech.xirius.payment.domain.repository.WalletTransactionRepositoryPort;
 public class RechargeWalletService implements RechargeWalletUseCase {
 
     private final WalletRepositoryPort walletRepository;
-    private final WalletTransactionRepositoryPort transactionRepository;
+    private final WalletTransactionRepositoryPort walletTransactionRepository;
 
     @Override
-    public void recharge(String userId, BigDecimal amount, Optional<UUID> paymentId) {
+    public void recharge(String userId, BigDecimal amount, UUID paymentId) {
         Wallet wallet = walletRepository.findByUserId(userId)
                 .orElse(new Wallet(UUID.randomUUID(), userId,
                         new Money(BigDecimal.ZERO, Currency.COP)));
@@ -37,20 +36,20 @@ public class RechargeWalletService implements RechargeWalletUseCase {
         wallet.recharge(new Money(amount, Currency.COP));
         walletRepository.save(wallet);
 
-        if (paymentId.isPresent()) {
-            transactionRepository.save(new WalletTransaction(
+        if (paymentId != null) {
+            walletTransactionRepository.save(new WalletTransaction(
                     UUID.randomUUID(),
                     wallet.getId(),
                     new Money(amount, Currency.COP),
                     WalletTransactionType.RECHARGE,
                     WalletTransactionStatus.APPROVED, // ES DE PRUEBA
                     ZonedDateTime.now(),
-                    paymentId.get(),
+                    paymentId,
                     previousBalance,
                     wallet.getBalance().getAmount()));
 
         } else {
-            transactionRepository.save(new WalletTransaction(
+            walletTransactionRepository.save(new WalletTransaction(
                     UUID.randomUUID(),
                     wallet.getId(),
                     new Money(amount, Currency.COP),
