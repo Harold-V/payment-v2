@@ -2,13 +2,12 @@ package tech.xirius.payment.infrastructure.web.dto;
 
 import java.math.BigDecimal;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record RechargeRequest(
-                @NotNull(message = "El userId no puede ser nulo") @JsonProperty("userId") String userId,
+        @Schema(description = "ID de el usuario") @NotNull(message = "El userId no puede ser nulo") String userId,
 
-                @NotNull(message = "El amount no puede ser nulo") @Positive(message = "El amount debe ser un número positivo") @JsonProperty("amount") BigDecimal amount) {
+        @Schema(description = "Monto a recargar") @NotNull(message = "El amount no puede ser nulo") @Positive(message = "El amount debe ser un número positivo") BigDecimal amount) {
 }
