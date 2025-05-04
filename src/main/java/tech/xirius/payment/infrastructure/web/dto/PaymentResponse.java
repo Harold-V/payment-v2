@@ -1,5 +1,10 @@
 package tech.xirius.payment.infrastructure.web.dto;
 
-public record PaymentResponse() {
+import tech.xirius.payment.domain.model.TransactionStatus;
+
+public record PaymentResponse(
+        String orderId,
+        String transactionId,
+        TransactionStatus state) {
 
 }

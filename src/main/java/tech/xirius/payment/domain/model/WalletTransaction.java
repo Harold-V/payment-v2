@@ -2,6 +2,7 @@ package tech.xirius.payment.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -11,6 +12,7 @@ import java.util.UUID;
  * Representa una transacción realizada en la billetera del usuario.
  */
 @Getter
+@Setter
 @AllArgsConstructor
 public class WalletTransaction {
 
@@ -22,7 +24,7 @@ public class WalletTransaction {
 
     private final WalletTransactionType type; // Tipo de transacción (recarga o deducción)
 
-    private final TransactionStatus status; // Estado de la transacción (aprobada, fallida, rechazada, pendiente)
+    private TransactionStatus status; // Estado de la transacción (aprobada, fallida, rechazada, pendiente)
 
     private final ZonedDateTime timestamp; // Fecha y hora de la transacción
 

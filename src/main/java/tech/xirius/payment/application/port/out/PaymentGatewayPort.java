@@ -1,6 +1,6 @@
 package tech.xirius.payment.application.port.out;
 
-import tech.xirius.payment.infrastructure.web.dto.PaymentRequest;
+import tech.xirius.payment.infrastructure.web.dto.RechargeRequest;
 import tech.xirius.payment.infrastructure.web.dto.PaymentResponse;
 
 /**
@@ -8,5 +8,5 @@ import tech.xirius.payment.infrastructure.web.dto.PaymentResponse;
  */
 public interface PaymentGatewayPort {
 
-    PaymentResponse processPayment(PaymentRequest request);
+    PaymentResponse processPayment(RechargeRequest request);
 }

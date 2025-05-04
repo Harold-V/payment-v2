@@ -1,7 +1,6 @@
 package tech.xirius.payment.application.port.in;
 
-import java.math.BigDecimal;
-import java.util.UUID;
+import tech.xirius.payment.infrastructure.web.dto.RechargeRequest;
 
 /**
  * Caso de uso para recargar dinero en la billetera del usuario.
@@ -11,5 +10,5 @@ import java.util.UUID;
  * </p>
  */
 public interface RechargeWalletUseCase {
-    void recharge(String userId, BigDecimal amount, UUID paymentId);
+    void recharge(RechargeRequest paymentRequest);
 }

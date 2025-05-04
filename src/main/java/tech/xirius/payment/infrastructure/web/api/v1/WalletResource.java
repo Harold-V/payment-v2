@@ -20,6 +20,7 @@ import tech.xirius.payment.application.port.in.GetWalletBalanceUseCase;
 import tech.xirius.payment.application.port.in.GetWalletTransactionsUseCase;
 import tech.xirius.payment.application.port.in.RechargeWalletUseCase;
 import tech.xirius.payment.infrastructure.persistence.mapper.WalletTransactionResponseMapper;
+import tech.xirius.payment.infrastructure.web.dto.DeductRequest;
 import tech.xirius.payment.infrastructure.web.dto.RechargeRequest;
 import tech.xirius.payment.infrastructure.web.dto.WalletBalanceResponse;
 import tech.xirius.payment.infrastructure.web.dto.WalletTransactionResponse;
@@ -39,12 +40,12 @@ public class WalletResource {
     @PostMapping("/rechargeDemo")
     public ResponseEntity<Void> rechargeDemo(@Valid @RequestBody RechargeRequest request) {
         log.info("Recargando wallet para usuario: {}", request.userId());
-        rechargeUseCase.recharge(request.userId(), request.amount(), null);
+        rechargeUseCase.recharge(request);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/deduct")
-    public ResponseEntity<Void> deduct(@Valid @RequestBody RechargeRequest request) {
+    public ResponseEntity<Void> deduct(@Valid @RequestBody DeductRequest request) {
         log.info("Descontando wallet para usuario: {}", request.userId());
         deductUseCase.deduct(request.userId(), request.amount());
         return ResponseEntity.ok().build();

@@ -2,12 +2,24 @@ package tech.xirius.payment.infrastructure.web.dto;
 
 import java.math.BigDecimal;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import tech.xirius.payment.domain.model.PaymentMethod;
+import tech.xirius.payment.domain.model.PaymentProvider;
 
 public record RechargeRequest(
-        @Schema(description = "ID de el usuario") @NotNull(message = "El userId no puede ser nulo") String userId,
+                String userId,
+                BigDecimal amount,
+                PaymentProvider paymentProvider,
+                PaymentMethod paymentMethod,
+                String description,
+                String notifyUrl,
+                String fullName,
+                String emailAddress,
+                String contactPhone,
+                String dniNumber,
+                ShippingAddress shippingAddress,
+                String creditCardNumber,
+                String securityCode,
+                String expirationDate,
+                String cardHolderName) {
 
-        @Schema(description = "Monto a recargar") @NotNull(message = "El amount no puede ser nulo") @Positive(message = "El amount debe ser un número positivo") BigDecimal amount) {
 }
