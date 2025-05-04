@@ -3,7 +3,6 @@ package tech.xirius.payment.infrastructure.persistence.entity;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -25,24 +24,19 @@ import tech.xirius.payment.domain.model.Currency;
 @Table(name = "wallet", uniqueConstraints = {
         @UniqueConstraint(columnNames = "user_id")
 })
-@Schema(description = "Entidad que representa la billetera de un usuario")
 public class WalletEntity {
 
     @Id
     @Column(name = "wallet_id", nullable = false, updatable = false)
-    @Schema(description = "ID único de la billetera", required = true)
     private UUID id; // ID de la billetera del usuario
 
     @Column(name = "user_id", nullable = false, unique = true, length = 255)
-    @Schema(description = "ID único del usuario al que pertenece la billetera", required = true)
     private String userId; // ID del usuario al que pertenece la billetera
 
     @Column(nullable = false, precision = 38, scale = 2)
-    @Schema(description = "Saldo actual de la billetera", required = true)
     private BigDecimal balance; // Saldo actual de la billetera
 
     @Enumerated(EnumType.STRING)
     @Column(name = "currency", nullable = false)
-    @Schema(description = "Moneda de la billetera (por ejemplo, USD, EUR)", required = true)
-    private Currency currency; // Moneda de la billetera (USD, EUR, etc.)
+    private Currency currency; // Moneda de la billetera (COP, EUR, etc.)
 }

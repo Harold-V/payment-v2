@@ -2,7 +2,6 @@ package tech.xirius.payment.infrastructure.persistence.entity;
 
 import java.util.UUID;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,40 +28,32 @@ import tech.xirius.payment.domain.model.TransactionStatus;
 @Table(name = "payments", uniqueConstraints = {
         @UniqueConstraint(columnNames = "transaction_id")
 })
-@Schema(description = "Entidad que representa un pago realizado por un usuario")
 public class PaymentEntity {
 
     @Id
     @Column(name = "payment_id", nullable = false, updatable = false)
-    @Schema(description = "ID único de la transacción de pago", required = true)
-    private UUID id;
+    private UUID id; // ID de la transacción de pago
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Wallet_transaction_id", nullable = false)
-    @Schema(description = "ID de la transacción de la billetera asociada al pago", required = true)
-    private WalletTransactionEntity walletTransaction;
+    private WalletTransactionEntity walletTransaction; // ID de la transacción en la billetera del usuario
 
     @Column(name = "order_id", nullable = false)
-    @Schema(description = "ID de la orden asociada al pago", required = true)
-    private String orderId;
+    private String orderId; // ID de la orden asociada al pago
 
     @Column(name = "transaction_id", nullable = false)
-    @Schema(description = "ID de la transacción de pago proporcionada por el proveedor de pago", required = true)
-    private String transactionId;
+    private String transactionId; // ID específico de la transacción en el sistema de la pasarela de pago
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)
-    @Schema(description = "Estado de la transacción de pago (APPROVED,FAILED,REJECTED,PENDING)", required = true)
-    private TransactionStatus paymentStatus;
+    private TransactionStatus paymentStatus; // Estado de la transacción (autorizado, procesado, fallido, etc.)
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_provider", nullable = false)
-    @Schema(description = "Proveedor de pago (PayU, MercadoPago, etc.) utilizado para la transacción", required = true)
-    private PaymentProvider paymentProvider;
+    private PaymentProvider paymentProvider; // Proveedor de pago (PayU, MercadoPago, etc.)
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method", nullable = false)
-    @Schema(description = "Método de pago utilizado (tarjeta, PSE, etc.)", required = true)
-    private PaymentMethod paymentMethod;
+    private PaymentMethod paymentMethod; // Método de pago (tarjeta, PSE, etc.)
 
 }
