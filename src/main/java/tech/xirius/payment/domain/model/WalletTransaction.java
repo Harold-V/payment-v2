@@ -14,20 +14,20 @@ import java.util.UUID;
 @AllArgsConstructor
 public class WalletTransaction {
 
-    private final UUID id;
+    private final UUID id; // ID de la transacción
 
-    private final UUID walletId;
+    private final UUID walletId; // ID de la billetera asociada a la transacción
 
-    private final Money amount;
+    private final Money amount; // Monto de la transacción
 
-    private final WalletTransactionType type;
+    private final WalletTransactionType type; // Tipo de transacción (recarga o deducción)
 
-    private final TransactionStatus status;
+    private final TransactionStatus status; // Estado de la transacción (aprobada, fallida, rechazada, pendiente)
 
-    private final ZonedDateTime timestamp;
+    private final ZonedDateTime timestamp; // Fecha y hora de la transacción
 
-    private final BigDecimal previousBalance;
+    private final BigDecimal previousBalance; // Saldo anterior de la billetera antes de la transacción
 
-    private final BigDecimal newBalance;
+    private final BigDecimal newBalance; // Saldo nuevo de la billetera después de la transacción
 
 }

@@ -2,6 +2,7 @@ package tech.xirius.payment.infrastructure.persistence.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tech.xirius.payment.domain.model.Currency;
 import tech.xirius.payment.domain.model.TransactionStatus;
 import tech.xirius.payment.domain.model.WalletTransactionType;
@@ -15,6 +16,7 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

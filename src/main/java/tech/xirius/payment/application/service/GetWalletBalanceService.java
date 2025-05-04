@@ -9,7 +9,7 @@ import tech.xirius.payment.domain.repository.WalletRepositoryPort;
 import tech.xirius.payment.infrastructure.web.dto.WalletBalanceResponse;
 
 /**
- * Servicio de aplicación para obtener el saldo de la wallet de un usuario.
+ * Servicio de aplicación para consultar el saldo de la billetera de un usuario.
  */
 @Service
 @RequiredArgsConstructor
@@ -17,6 +17,12 @@ public class GetWalletBalanceService implements GetWalletBalanceUseCase {
 
     private final WalletRepositoryPort walletRepository;
 
+    /**
+     * Obtiene el saldo de la billetera del usuario.
+     * 
+     * @param userId ID del usuario propietario de la billetera.
+     * @return Saldo de la billetera del usuario
+     */
     @Override
     public WalletBalanceResponse getWalletBalance(String userId) {
         // Buscar la wallet por userId

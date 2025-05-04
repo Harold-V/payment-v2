@@ -3,12 +3,14 @@ package tech.xirius.payment.domain.model;
 import java.math.BigDecimal;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Representa una cantidad de dinero junto con su moneda.
  */
 @Getter
 @EqualsAndHashCode
+@ToString
 public class Money {
     private final BigDecimal amount;
     private final Currency currency;
@@ -34,11 +36,6 @@ public class Money {
 
     public boolean isGreaterThanOrEqual(Money other) {
         return this.amount.compareTo(other.amount) >= 0;
-    }
-
-    @Override
-    public String toString() {
-        return amount + " " + currency;
     }
 
     private void validateCurrency(Money other) {

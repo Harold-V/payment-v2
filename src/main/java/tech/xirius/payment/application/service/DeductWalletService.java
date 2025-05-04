@@ -18,6 +18,9 @@ import tech.xirius.payment.domain.model.WalletTransactionType;
 import tech.xirius.payment.domain.repository.WalletRepositoryPort;
 import tech.xirius.payment.domain.repository.WalletTransactionRepositoryPort;
 
+/**
+ * Servicio de aplicación para deducir dinero de la billetera del usuario.
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -26,6 +29,12 @@ public class DeductWalletService implements DeductWalletUseCase {
     private final WalletRepositoryPort walletRepository;
     private final WalletTransactionRepositoryPort walletTransactionRepository;
 
+    /**
+     * Deducir el saldo de la billetera del usuario.
+     * 
+     * @param userId ID del usuario propietario de la billetera.
+     * @param amount Monto a deducir de la billetera.
+     */
     @Override
     public void deduct(String userId, BigDecimal amount) {
         // Buscar la wallet por userId
@@ -41,6 +50,7 @@ public class DeductWalletService implements DeductWalletUseCase {
         // Guardar wallet actualizada
         walletRepository.save(wallet);
 
+        // Guardar transacción en la base de datos
         walletTransactionRepository.save(new WalletTransaction(
                 UUID.randomUUID(),
                 wallet.getId(),

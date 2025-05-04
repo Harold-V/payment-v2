@@ -1,5 +1,6 @@
 package tech.xirius.payment.infrastructure.persistence.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,5 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import tech.xirius.payment.infrastructure.persistence.entity.PaymentEntity;
 
 public interface JpaPaymentRepository extends JpaRepository<PaymentEntity, UUID> {
+
+    Optional<PaymentEntity> findByTransactionId(String transactionId);
 
 }
