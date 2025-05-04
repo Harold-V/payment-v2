@@ -1,6 +1,6 @@
 package tech.xirius.payment.domain.model;
 
-public enum WalletTransactionStatus {
+public enum TransactionStatus {
     APPROVED,
     FAILED,
     REJECTED,

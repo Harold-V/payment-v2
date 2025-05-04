@@ -17,7 +17,6 @@ public interface WalletTransactionResponseMapper {
             @Mapping(target = "type", source = "transaction.type"),
             @Mapping(target = "status", source = "transaction.status"),
             @Mapping(target = "timestamp", source = "transaction.timestamp"),
-            @Mapping(target = "paymentId", source = "transaction.paymentId"),
             @Mapping(target = "previousBalance", source = "transaction.previousBalance"),
             @Mapping(target = "newBalance", source = "transaction.newBalance"),
             @Mapping(target = "id", source = "transaction.id")

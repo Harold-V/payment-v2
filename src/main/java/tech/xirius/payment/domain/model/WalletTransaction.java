@@ -22,11 +22,9 @@ public class WalletTransaction {
 
     private final WalletTransactionType type;
 
-    private final WalletTransactionStatus status;
+    private final TransactionStatus status;
 
     private final ZonedDateTime timestamp;
-
-    private final UUID paymentId;
 
     private final BigDecimal previousBalance;
 

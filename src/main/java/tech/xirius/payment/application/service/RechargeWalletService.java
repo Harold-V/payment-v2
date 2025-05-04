@@ -13,7 +13,7 @@ import tech.xirius.payment.domain.model.Currency;
 import tech.xirius.payment.domain.model.Money;
 import tech.xirius.payment.domain.model.Wallet;
 import tech.xirius.payment.domain.model.WalletTransaction;
-import tech.xirius.payment.domain.model.WalletTransactionStatus;
+import tech.xirius.payment.domain.model.TransactionStatus;
 import tech.xirius.payment.domain.model.WalletTransactionType;
 import tech.xirius.payment.domain.repository.WalletRepositoryPort;
 import tech.xirius.payment.domain.repository.WalletTransactionRepositoryPort;
@@ -42,9 +42,8 @@ public class RechargeWalletService implements RechargeWalletUseCase {
                     wallet.getId(),
                     new Money(amount, Currency.COP),
                     WalletTransactionType.RECHARGE,
-                    WalletTransactionStatus.APPROVED, // ES DE PRUEBA
+                    TransactionStatus.APPROVED, // ES DE PRUEBA
                     ZonedDateTime.now(),
-                    paymentId,
                     previousBalance,
                     wallet.getBalance().getAmount()));
 
@@ -54,10 +53,8 @@ public class RechargeWalletService implements RechargeWalletUseCase {
                     wallet.getId(),
                     new Money(amount, Currency.COP),
                     WalletTransactionType.RECHARGE,
-                    WalletTransactionStatus.APPROVED, // ES DE PRUEBA
+                    TransactionStatus.APPROVED, // ES DE PRUEBA
                     ZonedDateTime.now(),
-                    null, // Las recargas deberian tener un paymentId asociado pero estamos en un
-                          // ambiente de pruebas
                     previousBalance,
                     wallet.getBalance().getAmount()));
         }

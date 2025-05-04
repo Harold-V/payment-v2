@@ -3,7 +3,7 @@ package tech.xirius.payment.infrastructure.persistence.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import tech.xirius.payment.domain.model.Currency;
-import tech.xirius.payment.domain.model.WalletTransactionStatus;
+import tech.xirius.payment.domain.model.TransactionStatus;
 import tech.xirius.payment.domain.model.WalletTransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class WalletTransactionEntity {
 
     @Id
-    @Column(name = "transaction_id", nullable = false, updatable = false, unique = true)
+    @Column(name = "wallet_transaction_id", nullable = false, updatable = false, unique = true)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,13 +43,10 @@ public class WalletTransactionEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private WalletTransactionStatus status;
+    private TransactionStatus status;
 
     @Column(name = "timestamp", nullable = false)
     private ZonedDateTime timestamp;
-
-    @Column(name = "payment_id")
-    private UUID paymentId;
 
     @Column(name = "previous_balance", nullable = false, precision = 38, scale = 2)
     private BigDecimal previousBalance;

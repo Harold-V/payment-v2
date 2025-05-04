@@ -13,7 +13,7 @@ import tech.xirius.payment.domain.model.Currency;
 import tech.xirius.payment.domain.model.Money;
 import tech.xirius.payment.domain.model.Wallet;
 import tech.xirius.payment.domain.model.WalletTransaction;
-import tech.xirius.payment.domain.model.WalletTransactionStatus;
+import tech.xirius.payment.domain.model.TransactionStatus;
 import tech.xirius.payment.domain.model.WalletTransactionType;
 import tech.xirius.payment.domain.repository.WalletRepositoryPort;
 import tech.xirius.payment.domain.repository.WalletTransactionRepositoryPort;
@@ -46,9 +46,8 @@ public class DeductWalletService implements DeductWalletUseCase {
                 wallet.getId(),
                 new Money(amount, Currency.COP),
                 WalletTransactionType.DEDUCT,
-                WalletTransactionStatus.APPROVED,
+                TransactionStatus.APPROVED,
                 ZonedDateTime.now(),
-                null,
                 previousBalance,
                 wallet.getBalance().getAmount()));
     }

@@ -1,4 +1,4 @@
-package tech.xirius.payment.infrastructure.persistence.repository;
+package tech.xirius.payment.infrastructure.adapter;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -11,6 +11,7 @@ import tech.xirius.payment.domain.model.Wallet;
 import tech.xirius.payment.domain.repository.WalletRepositoryPort;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletEntity;
 import tech.xirius.payment.infrastructure.persistence.mapper.WalletMapper;
+import tech.xirius.payment.infrastructure.persistence.repository.JpaWalletRepository;
 
 @RequiredArgsConstructor
 @Component

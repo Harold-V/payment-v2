@@ -1,4 +1,4 @@
-package tech.xirius.payment.infrastructure.persistence.repository;
+package tech.xirius.payment.infrastructure.adapter;
 
 import java.util.UUID;
 
@@ -11,6 +11,7 @@ import tech.xirius.payment.domain.model.WalletTransaction;
 import tech.xirius.payment.domain.repository.WalletTransactionRepositoryPort;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletTransactionEntity;
 import tech.xirius.payment.infrastructure.persistence.mapper.WalletTransactionMapper;
+import tech.xirius.payment.infrastructure.persistence.repository.JpaWalletTransactionRepository;
 
 @RequiredArgsConstructor
 @Component

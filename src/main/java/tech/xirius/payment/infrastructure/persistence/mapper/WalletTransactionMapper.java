@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import tech.xirius.payment.domain.model.Money;
 import tech.xirius.payment.domain.model.WalletTransaction;
+import tech.xirius.payment.infrastructure.persistence.entity.PaymentEntity;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletEntity;
 import tech.xirius.payment.infrastructure.persistence.entity.WalletTransactionEntity;
 
@@ -42,5 +43,15 @@ public interface WalletTransactionMapper {
         WalletEntity walletEntity = new WalletEntity();
         walletEntity.setId(walletId);
         return walletEntity;
+    }
+
+    @Named("mapPaymentId")
+    default PaymentEntity mapPaymentId(UUID paymentId) {
+        if (paymentId == null) {
+            return null;
+        }
+        PaymentEntity paymentEntity = new PaymentEntity();
+        paymentEntity.setId(paymentId);
+        return paymentEntity;
     }
 }
