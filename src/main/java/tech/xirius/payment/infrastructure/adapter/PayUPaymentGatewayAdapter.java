@@ -63,11 +63,7 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
                     new ParameterizedTypeReference<>() {
                     });
 
-            Map<String, Object> body = response.getBody() != null ? new HashMap<>(response.getBody()) : new HashMap<>();
-            body.put("referenceCode", referenceCode);
-            body.put("userId", rechargeRequest.userId());
-
-            return body;
+            return response.getBody();
         } catch (Exception e) {
             log.error("Error procesando pago PSE con PayU", e);
             throw new RuntimeException("Error al procesar el pago con PayU", e);
@@ -208,7 +204,8 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
 
             if (rechargeRequest.paymentMethod() == PaymentMethod.PSE) {
                 transactionNode.put("paymentMethod", "PSE");
-            } else if (rechargeRequest.paymentMethod() == PaymentMethod.CREDIT) {
+            } else if (rechargeRequest.paymentMethod() == PaymentMethod.CREDIT
+                    || rechargeRequest.paymentMethod() == PaymentMethod.DEBIT) {
                 transactionNode.put("paymentMethod", "VISA"); // Debe haber la manera la cual poder capturar el tipo de
                                                               // tarjeta
             }
@@ -223,7 +220,6 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
             // Modo de prueba
             rootNode.put("test", payuConfig.getTransaction().isTest());
-
             return rootNode;
         } catch (Exception e) {
             log.error("Error al crear el cuerpo de la solicitud: {}", e.getMessage(), e);
