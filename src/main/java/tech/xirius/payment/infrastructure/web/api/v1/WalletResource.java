@@ -1,5 +1,7 @@
 package tech.xirius.payment.infrastructure.web.api.v1;
 
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -38,10 +40,10 @@ public class WalletResource {
     private final WalletTransactionResponseMapper walletTransactionResponseMapper;
 
     @PostMapping("/rechargeDemo")
-    public ResponseEntity<Void> rechargeDemo(@Valid @RequestBody RechargeRequest request) {
+    public ResponseEntity<Map<String, Object>> rechargeDemo(@Valid @RequestBody RechargeRequest request) {
         log.info("Recargando wallet para usuario: {}", request.userId());
-        rechargeUseCase.recharge(request);
-        return ResponseEntity.ok().build();
+        Map<String, Object> response = rechargeUseCase.recharge(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/deduct")

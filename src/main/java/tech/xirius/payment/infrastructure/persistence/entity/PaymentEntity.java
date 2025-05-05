@@ -1,7 +1,5 @@
 package tech.xirius.payment.infrastructure.persistence.entity;
 
-import java.util.UUID;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -32,7 +30,7 @@ public class PaymentEntity {
 
     @Id
     @Column(name = "payment_id", nullable = false, updatable = false)
-    private UUID id; // ID de la transacción de pago
+    private String id; // ID de la transacción de pago
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Wallet_transaction_id", nullable = false)

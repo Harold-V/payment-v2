@@ -1,5 +1,7 @@
 package tech.xirius.payment.application.port.in;
 
+import java.util.Map;
+
 import tech.xirius.payment.infrastructure.web.dto.RechargeRequest;
 
 /**
@@ -10,5 +12,6 @@ import tech.xirius.payment.infrastructure.web.dto.RechargeRequest;
  * </p>
  */
 public interface RechargeWalletUseCase {
-    void recharge(RechargeRequest paymentRequest);
+
+    Map<String, Object> recharge(RechargeRequest paymentRequest);
 }

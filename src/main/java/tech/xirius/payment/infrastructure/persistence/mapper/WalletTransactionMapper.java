@@ -46,7 +46,7 @@ public interface WalletTransactionMapper {
     }
 
     @Named("mapPaymentId")
-    default PaymentEntity mapPaymentId(UUID paymentId) {
+    default PaymentEntity mapPaymentId(String paymentId) {
         if (paymentId == null) {
             return null;
         }

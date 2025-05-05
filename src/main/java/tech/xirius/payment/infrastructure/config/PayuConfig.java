@@ -35,7 +35,6 @@ public class PayuConfig {
         private String login;
         private String key;
         private String url;
-
     }
 
     @Getter

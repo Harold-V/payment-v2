@@ -2,6 +2,7 @@ package tech.xirius.payment.application.service;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class RechargeWalletService implements RechargeWalletUseCase {
      * @param paymentId ID de la transacción de pago.
      */
     @Override
-    public void recharge(RechargeRequest paymentRequest) {
+    public Map<String, Object> recharge(RechargeRequest paymentRequest) {
 
         Wallet wallet = walletRepository.findByUserId(paymentRequest.userId())
                 .orElse(new Wallet(UUID.randomUUID(), paymentRequest.userId(),
@@ -65,39 +66,11 @@ public class RechargeWalletService implements RechargeWalletUseCase {
                 previousBalance,
                 wallet.getBalance().getAmount());
 
-        PaymentResponse paymentResponse = paymentGatewayPort.processPayment(paymentRequest);
-
-        // Evaluar el estado de la respuesta del pago y actualizar la transacción
-        switch (paymentResponse.state()) {
-            case APPROVED:
-                walletTransaction.setStatus(TransactionStatus.APPROVED);
-                wallet.recharge(new Money(paymentRequest.amount(), Currency.COP));
-                walletRepository.save(wallet); // Guardar el nuevo saldo en la billetera
-                break;
-            case FAILED:
-                walletTransaction.setStatus(TransactionStatus.FAILED);
-                break;
-            case REJECTED:
-                walletTransaction.setStatus(TransactionStatus.REJECTED);
-                break;
-            default:
-                walletTransaction.setStatus(TransactionStatus.PENDING);
-                break;
-        }
-
-        Payment payment = new Payment(
-                UUID.randomUUID(),
-                walletTransaction.getId(),
-                paymentResponse.orderId(),
-                paymentResponse.transactionId(),
-                paymentResponse.state(),
-                paymentRequest.paymentProvider(),
-                paymentRequest.paymentMethod()
-
-        );
+        Map<String, Object> paymentResponse = paymentGatewayPort.processPayment(paymentRequest);
 
         walletTransactionRepository.save(walletTransaction);
-        paymentRepositoryPort.save(payment);
+
+        return paymentResponse;
 
     }
 

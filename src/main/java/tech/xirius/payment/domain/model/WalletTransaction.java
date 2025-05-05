@@ -30,6 +30,6 @@ public class WalletTransaction {
 
     private final BigDecimal previousBalance; // Saldo anterior de la billetera antes de la transacción
 
-    private final BigDecimal newBalance; // Saldo nuevo de la billetera después de la transacción
+    private BigDecimal newBalance; // Saldo nuevo de la billetera después de la transacción
 
 }
