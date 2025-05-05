@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Payment {
-    private String id; // ID de la transacción de pago
+    private UUID id; // ID de la transacción de pago
     private UUID walletTransactionId; // ID de la transacción en la billetera del usuario
     private String orderId; // ID de la orden asociada al pago
     private String transactionId; // ID específico de la transacción en el sistema de la pasarela de pago
