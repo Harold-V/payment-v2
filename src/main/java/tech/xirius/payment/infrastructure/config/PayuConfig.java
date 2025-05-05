@@ -41,8 +41,6 @@ public class PayuConfig {
     @Setter
     public static class Transaction {
         private String language;
-        private String command;
-        private String type;
         private String paymentCountry;
         private boolean test;
 

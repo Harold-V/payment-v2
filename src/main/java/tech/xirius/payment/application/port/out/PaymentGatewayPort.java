@@ -1,8 +1,9 @@
 package tech.xirius.payment.application.port.out;
 
-import tech.xirius.payment.infrastructure.web.dto.RechargeRequest;
-
 import java.util.Map;
+
+import tech.xirius.payment.infrastructure.adapter.payu.dto.RechargeRequest;
+import tech.xirius.payment.infrastructure.adapter.payu.dto.Transaction;
 
 /**
  * Interfaz para la comunicación con el gateway de pagos.
@@ -10,4 +11,6 @@ import java.util.Map;
 public interface PaymentGatewayPort {
 
     Map<String, Object> processPayment(RechargeRequest request);
+
+    Map<String, Object> getTransactionStatus(Transaction transactionId);
 }

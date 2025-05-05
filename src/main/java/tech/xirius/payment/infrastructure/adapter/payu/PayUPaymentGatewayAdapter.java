@@ -1,10 +1,9 @@
-package tech.xirius.payment.infrastructure.adapter;
+package tech.xirius.payment.infrastructure.adapter.payu;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
@@ -20,8 +19,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tech.xirius.payment.application.port.out.PaymentGatewayPort;
 import tech.xirius.payment.domain.model.PaymentMethod;
+import tech.xirius.payment.infrastructure.adapter.payu.dto.RechargeRequest;
+import tech.xirius.payment.infrastructure.adapter.payu.dto.Transaction;
 import tech.xirius.payment.infrastructure.config.PayuConfig;
-import tech.xirius.payment.infrastructure.web.dto.RechargeRequest;
 
 /**
  * Adaptador reactivo para el gateway de pago PayU.
@@ -40,16 +40,12 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
     @Override
     public Map<String, Object> processPayment(RechargeRequest rechargeRequest) {
         log.info("Procesando pago con PayU para usuario: {}", rechargeRequest.userId());
-
         // Crear referencia única para esta transacción
         String referenceCode = generateReferenceCode(rechargeRequest);
-
         // Calcular firma para la transacción
         String signature = createSignature(rechargeRequest, referenceCode);
-
         // Crear el cuerpo de la solicitud como un objeto JSON
         ObjectNode requestNode = createRequestBody(rechargeRequest, signature, referenceCode);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -81,7 +77,8 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
     /**
      * Crea el cuerpo de la solicitud como un objeto JSON estructurado
      */
-    private ObjectNode createRequestBody(RechargeRequest rechargeRequest, String signature, String referenceCode) {
+    private ObjectNode createRequestBody(RechargeRequest rechargeRequest, String signature,
+            String referenceCode) {
         try {
             // Valores del IVA y base gravable
             BigDecimal taxRate = new BigDecimal("0.19"); // 19% de IVA en Colombia
@@ -91,7 +88,7 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
             // Crear el objeto JSON raíz
             ObjectNode rootNode = objectMapper.createObjectNode();
             rootNode.put("language", payuConfig.getTransaction().getLanguage());
-            rootNode.put("command", payuConfig.getTransaction().getCommand());
+            rootNode.put("command", "SUBMIT_TRANSACTION");
 
             // Información del comercio
             ObjectNode merchantNode = rootNode.putObject("merchant");
@@ -247,4 +244,55 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
             throw new RuntimeException("Error generando la firma de PayU", e);
         }
     }
+
+    @Override
+    public Map<String, Object> getTransactionStatus(Transaction transactionId) {
+        log.info("Consultando Transaccion para : {}", transactionId);
+        // Crear referencia única para esta transacción
+
+        // Crear el cuerpo de la solicitud como un objeto JSON
+        ObjectNode requestNode = createRequestBody(transactionId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<ObjectNode> entity = new HttpEntity<>(requestNode, headers);
+
+        try {
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                    payuConfig.getApi().getUrl() + "/reports-api/4.0/service.cgi",
+                    HttpMethod.POST,
+                    entity,
+                    new ParameterizedTypeReference<>() {
+                    });
+
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("Error procesando consulta", e);
+            throw new RuntimeException("Error al procesar la consulta con PayU", e);
+        }
+    }
+
+    private ObjectNode createRequestBody(Transaction transactionId) {
+        try {
+            // Crear el objeto JSON raíz
+            ObjectNode rootNode = objectMapper.createObjectNode();
+            rootNode.put("test", payuConfig.getTransaction().isTest());
+            rootNode.put("language", payuConfig.getTransaction().getLanguage());
+            rootNode.put("command", "TRANSACTION_RESPONSE_DETAIL");
+
+            // Información del comercio
+            ObjectNode merchantNode = rootNode.putObject("merchant");
+            merchantNode.put("apiLogin", payuConfig.getApi().getLogin());
+            merchantNode.put("apiKey", payuConfig.getApi().getKey());
+
+            ObjectNode detailsNode = rootNode.putObject("details");
+            detailsNode.put("transactionId", transactionId.transactionId());
+
+            return rootNode;
+        } catch (Exception e) {
+            log.error("Error al crear el cuerpo de la solicitud: {}", e.getMessage(), e);
+            throw new RuntimeException("Error al crear el cuerpo de la solicitud: " + e.getMessage(), e);
+        }
+    }
+
 }

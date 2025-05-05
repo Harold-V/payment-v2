@@ -2,7 +2,7 @@ package tech.xirius.payment.application.port.in;
 
 import java.util.Map;
 
-import tech.xirius.payment.infrastructure.web.dto.RechargeRequest;
+import tech.xirius.payment.infrastructure.adapter.payu.dto.RechargeRequest;
 
 /**
  * Caso de uso para recargar dinero en la billetera del usuario.

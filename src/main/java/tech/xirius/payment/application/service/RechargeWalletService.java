@@ -13,16 +13,13 @@ import tech.xirius.payment.application.port.in.RechargeWalletUseCase;
 import tech.xirius.payment.application.port.out.PaymentGatewayPort;
 import tech.xirius.payment.domain.model.Currency;
 import tech.xirius.payment.domain.model.Money;
-import tech.xirius.payment.domain.model.Payment;
 import tech.xirius.payment.domain.model.Wallet;
 import tech.xirius.payment.domain.model.WalletTransaction;
 import tech.xirius.payment.domain.model.TransactionStatus;
 import tech.xirius.payment.domain.model.WalletTransactionType;
-import tech.xirius.payment.domain.repository.PaymentRepositoryPort;
 import tech.xirius.payment.domain.repository.WalletRepositoryPort;
 import tech.xirius.payment.domain.repository.WalletTransactionRepositoryPort;
-import tech.xirius.payment.infrastructure.web.dto.RechargeRequest;
-import tech.xirius.payment.infrastructure.web.dto.PaymentResponse;
+import tech.xirius.payment.infrastructure.adapter.payu.dto.RechargeRequest;
 
 /*
  * Servicio de aplicación para recargar dinero en la billetera del usuario.
@@ -36,7 +33,6 @@ public class RechargeWalletService implements RechargeWalletUseCase {
     private final WalletRepositoryPort walletRepository;
     private final WalletTransactionRepositoryPort walletTransactionRepository;
     private final PaymentGatewayPort paymentGatewayPort;
-    private final PaymentRepositoryPort paymentRepositoryPort;
 
     /**
      * Recarga el saldo de la billetera del usuario.

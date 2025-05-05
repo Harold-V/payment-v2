@@ -26,6 +26,4 @@ payu:
   transaction:
     test: true
     language: "es"
-    command: "SUBMIT_TRANSACTION"
-    type: "AUTHORIZATION_AND_CAPTURE"
     paymentCountry: "CO"

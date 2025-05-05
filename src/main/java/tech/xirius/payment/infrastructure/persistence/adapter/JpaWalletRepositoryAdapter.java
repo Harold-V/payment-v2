@@ -1,4 +1,4 @@
-package tech.xirius.payment.infrastructure.adapter;
+package tech.xirius.payment.infrastructure.persistence.adapter;
 
 import java.math.BigDecimal;
 import java.util.Optional;
