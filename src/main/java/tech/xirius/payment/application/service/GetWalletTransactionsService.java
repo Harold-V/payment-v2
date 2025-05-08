@@ -35,6 +35,6 @@ public class GetWalletTransactionsService implements GetWalletTransactionsUseCas
         Wallet wallet = walletRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Wallet not found"));
 
-        return transactionRepository.findAllByWalletId(wallet.getId(), pageable);
+        return transactionRepository.findAllByWalletId(wallet.getWalletId(), pageable);
     }
 }

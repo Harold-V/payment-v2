@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.validation.Valid;
@@ -23,7 +26,7 @@ import tech.xirius.payment.application.port.in.GetWalletBalanceUseCase;
 import tech.xirius.payment.application.port.in.GetWalletTransactionsUseCase;
 import tech.xirius.payment.application.port.in.RechargeWalletUseCase;
 import tech.xirius.payment.infrastructure.adapter.payu.dto.RechargeRequest;
-import tech.xirius.payment.infrastructure.adapter.payu.dto.Transaction;
+import tech.xirius.payment.infrastructure.adapter.payu.dto.GatewayTransaction;
 import tech.xirius.payment.infrastructure.persistence.mapper.WalletTransactionResponseMapper;
 import tech.xirius.payment.infrastructure.web.dto.DeductRequest;
 import tech.xirius.payment.infrastructure.web.dto.WalletBalanceResponse;
@@ -82,9 +85,9 @@ public class WalletResource {
     }
 
     @PostMapping("/transaction")
-    public ResponseEntity<Map<String, Object>> getTransactionStatus(@RequestBody Transaction request) {
-        log.info("Consultando Estado para transaccion: {}", request.transactionId());
-        Map<String, Object> response = getTransactionStatusUseCase.getTransactionStatus(request);
+    public ResponseEntity<ObjectNode> getTransactionStatus(@RequestBody GatewayTransaction request) {
+        log.info("Consultando Estado para transaccion: {}", request.gatewayTransactionId());
+        ObjectNode response = getTransactionStatusUseCase.getTransactionStatus(request);
         return ResponseEntity.ok(response);
     }
 

@@ -10,26 +10,95 @@ import java.util.UUID;
 
 /**
  * Representa una transacción realizada en la billetera del usuario.
+ * <p>
+ * Esta clase encapsula los detalles de una operación financiera dentro de la
+ * billetera,
+ * incluyendo información sobre el monto, tipo de transacción, estado, y el
+ * impacto
+ * en el saldo de la billetera.
+ * </p>
  */
 @Getter
 @Setter
 @AllArgsConstructor
 public class WalletTransaction {
 
-    private final UUID id; // ID de la transacción
+    /**
+     * Identificador único de la transacción.
+     * <p>
+     * Este campo es inmutable una vez creada la transacción.
+     * </p>
+     */
+    private final UUID walletTransactionId;
 
-    private final UUID walletId; // ID de la billetera asociada a la transacción
+    /**
+     * Identificador de la billetera asociada a esta transacción.
+     * <p>
+     * Este campo es inmutable y establece la relación entre la transacción
+     * y la billetera del usuario.
+     * </p>
+     */
+    private final Wallet wallet;
 
-    private final Money amount; // Monto de la transacción
+    /**
+     * Monto de la transacción.
+     * <p>
+     * Representa la cantidad de dinero involucrada en la operación,
+     * incluyendo el valor y el tipode moneda.
+     * </p>
+     * 
+     * @see Money
+     */
+    private final Money amount;
 
-    private final WalletTransactionType type; // Tipo de transacción (recarga o deducción)
+    /**
+     * Tipo de transacción realizada.
+     * <p>
+     * Especifica si es una recarga (crédito) o una deducción (débito) de fondos.
+     * </p>
+     * 
+     * @see WalletTransactionType
+     */
+    private final WalletTransactionType type;
 
-    private TransactionStatus status; // Estado de la transacción (aprobada, fallida, rechazada, pendiente)
+    /**
+     * Estado actual de la transacción.
+     * <p>
+     * Indica si la transacción ha sido aprobada, fallida, rechazada o
+     * está pendiente de procesamiento.
+     * </p>
+     * <p>
+     * Este es uno de los pocos campos que pueden ser modificados después de
+     * la creación de la transacción, reflejando su progreso en el sistema.
+     * </p>
+     * 
+     * @see TransactionStatus
+     */
+    private TransactionStatus status;
 
-    private final ZonedDateTime timestamp; // Fecha y hora de la transacción
+    /**
+     * Fecha y hora exacta en que se realizó la transacción.
+     * <p>
+     * Este valor incluye información de zona horaria y es inmutable.
+     * </p>
+     */
+    private final ZonedDateTime timestamp;
 
-    private final BigDecimal previousBalance; // Saldo anterior de la billetera antes de la transacción
+    /**
+     * Saldo de la billetera antes de aplicar esta transacción.
+     * <p>
+     * Este campo es inmutable y sirve como referencia histórica del
+     * estado de la billetera en el momento de iniciar la transacción.
+     * </p>
+     */
+    private final BigDecimal previousBalance;
 
-    private BigDecimal newBalance; // Saldo nuevo de la billetera después de la transacción
-
+    /**
+     * Saldo de la billetera después de aplicar esta transacción.
+     * <p>
+     * Este campo puede ser actualizado si la transacción se procesa en
+     * múltiples etapas o si hay ajustes posteriores.
+     * </p>
+     */
+    private BigDecimal newBalance;
 }

@@ -53,7 +53,7 @@ public class DeductWalletService implements DeductWalletUseCase {
         // Guardar transacción en la base de datos
         walletTransactionRepository.save(new WalletTransaction(
                 UUID.randomUUID(),
-                wallet.getId(),
+                wallet,
                 new Money(amount, Currency.COP),
                 WalletTransactionType.DEDUCT,
                 TransactionStatus.APPROVED,

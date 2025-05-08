@@ -13,9 +13,28 @@ import tech.xirius.payment.domain.exception.InsufficientBalanceException;
 @AllArgsConstructor
 @Getter
 public class Wallet {
-    private final UUID id; // ID de la billetera
-    private final String userId; // ID del usuario propietario de la billetera
-    private Money balance; // Saldo actual de la billetera
+
+    /**
+     * ID de la billetera.
+     * <p>
+     * Este ID es único y se genera automáticamente al crear la billetera.
+     * </p>
+     */
+    private final UUID walletId;
+    /**
+     * ID del usuario propietario de la billetera.
+     * <p>
+     * Este ID se utiliza para identificar al usuario asociado a la billetera.
+     * </p>
+     */
+    private final String userId;
+    /**
+     * Saldo actual de la billetera.
+     * <p>
+     * Este campo representa la cantidad de dinero disponible en la billetera.
+     * </p>
+     */
+    private Money balance;
 
     /**
      * Recarga la billetera con una cantidad específica de dinero.

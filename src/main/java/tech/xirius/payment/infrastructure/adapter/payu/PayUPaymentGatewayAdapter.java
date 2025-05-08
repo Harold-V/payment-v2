@@ -20,13 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 import tech.xirius.payment.application.port.out.PaymentGatewayPort;
 import tech.xirius.payment.domain.model.PaymentMethod;
 import tech.xirius.payment.infrastructure.adapter.payu.dto.RechargeRequest;
-import tech.xirius.payment.infrastructure.adapter.payu.dto.Transaction;
+import tech.xirius.payment.infrastructure.adapter.payu.dto.GatewayTransaction;
 import tech.xirius.payment.infrastructure.config.PayuConfig;
 
 /**
- * Adaptador reactivo para el gateway de pago PayU.
- * Implementa la interfaz PaymentGatewayPort para procesar pagos a través de
- * PayU de manera no bloqueante.
+ * Adaptador de la pasarela de pagos PayU para procesar pagos y consultar el
+ * estado de las transacciones.
+ * Este componente se encarga de interactuar con la API de PayU para realizar
+ * transacciones de pago, generando las solicitudes y procesando las respuestas
+ * de forma adecuada.
  */
 @Component
 @RequiredArgsConstructor
@@ -37,6 +39,12 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
 
+    /**
+     * Procesa un pago utilizando la pasarela PayU.
+     * 
+     * @param rechargeRequest Detalles del pago a procesar.
+     * @return Un mapa con la respuesta de la API de PayU
+     */
     @Override
     public Map<String, Object> processPayment(RechargeRequest rechargeRequest) {
         log.info("Procesando pago con PayU para usuario: {}", rechargeRequest.userId());
@@ -67,7 +75,10 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
     }
 
     /**
-     * Genera un código de referencia único para la transacción
+     * Genera un código de referencia único para la transacción.
+     * 
+     * @param request Detalles de la solicitud de recarga.
+     * @return Un código de referencia único.
      */
     private String generateReferenceCode(RechargeRequest request) {
         return "REF-" + System.currentTimeMillis() + "-"
@@ -75,7 +86,12 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
     }
 
     /**
-     * Crea el cuerpo de la solicitud como un objeto JSON estructurado
+     * Crea el cuerpo de la solicitud de pago como un objeto JSON.
+     * 
+     * @param rechargeRequest Detalles de la solicitud de recarga.
+     * @param signature       La firma de la transacción.
+     * @param referenceCode   El código de referencia único de la transacción.
+     * @return El cuerpo de la solicitud como un objeto JSON.
      */
     private ObjectNode createRequestBody(RechargeRequest rechargeRequest, String signature,
             String referenceCode) {
@@ -161,6 +177,7 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
             payerNode.put("dniNumber", rechargeRequest.dniNumber());
             payerNode.put("dniType", rechargeRequest.dniType());
 
+            // Dirección de envío del pagador
             ObjectNode billingAddressNode = payerNode.putObject("billingAddress");
             billingAddressNode.put("street1", rechargeRequest.shippingAddress().street1());
             billingAddressNode.put("street2", rechargeRequest.shippingAddress().street2());
@@ -174,24 +191,22 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
                     || rechargeRequest.paymentMethod() == PaymentMethod.DEBIT) {
                 // Información de la tarjeta de crédito
                 ObjectNode creditCardNode = transactionNode.putObject("creditCard");
-                creditCardNode.put("number", rechargeRequest.creditCardNumber());
-                creditCardNode.put("securityCode", rechargeRequest.securityCode());
-                creditCardNode.put("expirationDate", rechargeRequest.expirationDate());
-                creditCardNode.put("name", rechargeRequest.cardHolderName());
+                creditCardNode.put("number", rechargeRequest.cardDetails().creditCardNumber());
+                creditCardNode.put("securityCode", rechargeRequest.cardDetails().securityCode());
+                creditCardNode.put("expirationDate", rechargeRequest.cardDetails().expirationDate());
+                creditCardNode.put("name", rechargeRequest.cardDetails().cardHolderName());
 
                 // Parámetros extra
                 ObjectNode extraParamsNode = transactionNode.putObject("extraParameters");
-                extraParamsNode.put("INSTALLMENTS_NUMBER", 1);// Número de cuotas (1 para pago total)
+                extraParamsNode.put("INSTALLMENTS_NUMBER", 1); // Número de cuotas (1 para pago total)
             } else if (rechargeRequest.paymentMethod() == PaymentMethod.PSE) {
                 ObjectNode extraParamsNode = transactionNode.putObject("extraParameters");
                 extraParamsNode.put("RESPONSE_URL", "http://www.payu.com/response");
                 extraParamsNode.put("PSE_REFERENCE1", "127.0.0.1");
-                extraParamsNode.put("FINANCIAL_INSTITUTION_CODE", "1022");// Debo Capturar el codigo de la entidad
-                                                                          // cuando obtenga los bancos
+                extraParamsNode.put("FINANCIAL_INSTITUTION_CODE", "1022"); // Código de la entidad bancaria
                 extraParamsNode.put("USER_TYPE", rechargeRequest.userType());
                 extraParamsNode.put("PSE_REFERENCE2", rechargeRequest.dniType());
-                extraParamsNode.put("PSE_REFERENCE3", "123456789"); // Leer Docuemntacion de Pse para saber sobre este
-                                                                    // Campo
+                extraParamsNode.put("PSE_REFERENCE3", "123456789"); // Referencia adicional de PSE
             } else {
                 throw new IllegalArgumentException("Método de pago no soportado: " + rechargeRequest.paymentMethod());
             }
@@ -203,8 +218,7 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
                 transactionNode.put("paymentMethod", "PSE");
             } else if (rechargeRequest.paymentMethod() == PaymentMethod.CREDIT
                     || rechargeRequest.paymentMethod() == PaymentMethod.DEBIT) {
-                transactionNode.put("paymentMethod", "VISA"); // Debe haber la manera la cual poder capturar el tipo de
-                                                              // tarjeta
+                transactionNode.put("paymentMethod", "VISA"); // Debe capturar el tipo de tarjeta (NOSE COMO)
             }
 
             transactionNode.put("paymentCountry", payuConfig.getTransaction().getPaymentCountry());
@@ -217,6 +231,7 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
             // Modo de prueba
             rootNode.put("test", payuConfig.getTransaction().isTest());
+
             return rootNode;
         } catch (Exception e) {
             log.error("Error al crear el cuerpo de la solicitud: {}", e.getMessage(), e);
@@ -225,7 +240,11 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
     }
 
     /**
-     * Crea la firma digital para autenticar la transacción con PayU
+     * Crea la firma digital para autenticar la transacción con PayU.
+     * 
+     * @param rechargeRequest Detalles de la solicitud de recarga.
+     * @param referenceCode   El código de referencia único de la transacción.
+     * @return La firma digital de la transacción.
      */
     private String createSignature(RechargeRequest rechargeRequest, String referenceCode) {
         try {
@@ -245,8 +264,14 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
         }
     }
 
+    /**
+     * Consulta el estado de una transacción con PayU.
+     * 
+     * @param transactionId El identificador de la transacción.
+     * @return Un mapa con los detalles de la transacción
+     */
     @Override
-    public Map<String, Object> getTransactionStatus(Transaction transactionId) {
+    public ObjectNode getTransactionStatus(GatewayTransaction transactionId) {
         log.info("Consultando Transaccion para : {}", transactionId);
         // Crear referencia única para esta transacción
 
@@ -258,7 +283,7 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
         HttpEntity<ObjectNode> entity = new HttpEntity<>(requestNode, headers);
 
         try {
-            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+            ResponseEntity<ObjectNode> response = restTemplate.exchange(
                     payuConfig.getApi().getUrl() + "/reports-api/4.0/service.cgi",
                     HttpMethod.POST,
                     entity,
@@ -272,7 +297,13 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
         }
     }
 
-    private ObjectNode createRequestBody(Transaction transactionId) {
+    /**
+     * Crea el cuerpo de la solicitud para consultar el estado de una transacción.
+     * 
+     * @param transactionId El identificador de la transacción.
+     * @return El cuerpo de la solicitud como un objeto JSON.
+     */
+    private ObjectNode createRequestBody(GatewayTransaction transactionId) {
         try {
             // Crear el objeto JSON raíz
             ObjectNode rootNode = objectMapper.createObjectNode();
@@ -286,7 +317,7 @@ public class PayUPaymentGatewayAdapter implements PaymentGatewayPort {
             merchantNode.put("apiKey", payuConfig.getApi().getKey());
 
             ObjectNode detailsNode = rootNode.putObject("details");
-            detailsNode.put("transactionId", transactionId.transactionId());
+            detailsNode.put("transactionId", transactionId.gatewayTransactionId());
 
             return rootNode;
         } catch (Exception e) {

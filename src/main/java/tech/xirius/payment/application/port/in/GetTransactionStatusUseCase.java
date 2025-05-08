@@ -1,9 +1,13 @@
 package tech.xirius.payment.application.port.in;
 
-import java.util.Map;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import tech.xirius.payment.infrastructure.adapter.payu.dto.Transaction;
+import tech.xirius.payment.infrastructure.adapter.payu.dto.GatewayTransaction;
 
+/**
+ * Caso de uso para obtener el estado de una transacción a traves del api de
+ * payu.
+ */
 public interface GetTransactionStatusUseCase {
-    Map<String, Object> getTransactionStatus(Transaction transactionId);
+    ObjectNode getTransactionStatus(GatewayTransaction transactionId);
 }

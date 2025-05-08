@@ -54,7 +54,7 @@ public class RechargeWalletService implements RechargeWalletUseCase {
 
         WalletTransaction walletTransaction = new WalletTransaction(
                 UUID.randomUUID(),
-                wallet.getId(),
+                wallet,
                 new Money(paymentRequest.amount(), Currency.COP),
                 WalletTransactionType.RECHARGE,
                 TransactionStatus.PENDING,

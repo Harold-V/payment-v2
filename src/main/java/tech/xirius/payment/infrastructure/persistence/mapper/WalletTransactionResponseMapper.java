@@ -11,15 +11,9 @@ import tech.xirius.payment.infrastructure.web.dto.WalletTransactionResponse;
 public interface WalletTransactionResponseMapper {
 
     @Mappings({
-            @Mapping(target = "userId", source = "userId"),
-            @Mapping(target = "amount", source = "transaction.amount.amount"),
-            @Mapping(target = "currency", source = "transaction.amount.currency"),
-            @Mapping(target = "type", source = "transaction.type"),
-            @Mapping(target = "status", source = "transaction.status"),
-            @Mapping(target = "timestamp", source = "transaction.timestamp"),
-            @Mapping(target = "previousBalance", source = "transaction.previousBalance"),
-            @Mapping(target = "newBalance", source = "transaction.newBalance"),
-            @Mapping(target = "id", source = "transaction.id")
+
+            @Mapping(target = "id", source = "transaction.walletTransactionId"),
+            @Mapping(target = "walletId", source = "transaction.wallet.walletId"),
     })
     WalletTransactionResponse toResponse(WalletTransaction transaction, String userId);
 

@@ -5,5 +5,8 @@ package tech.xirius.payment.domain.model;
  * usuario.
  */
 public enum Currency {
+    /**
+     * Representa la moneda en pesos colombianos.
+     */
     COP
 }
